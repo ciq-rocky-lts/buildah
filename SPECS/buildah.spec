@@ -8,13 +8,13 @@ go build -buildmode pie -compiler gc -tags="rpm_crashtraceback libtrust_openssl 
 %endif
 
 %global import_path github.com/containers/buildah
-%global branch release-1.33
-%global commit0 b95e96247df1c233f23f07aad37b25f5118a4f47
+#%%global branch release-1.33
+%global commit0 5fd40b989860984a00f6fc1539ff53caceca1325
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 Epoch: 2
 Name: buildah
-Version: 1.33.7
+Version: 1.37.5
 Release: 1%{?dist}
 Summary: A command line tool used for creating OCI Images
 License: ASL 2.0
@@ -93,7 +93,7 @@ popd
 mv vendor src
 
 export GOPATH=$(pwd)/_build:$(pwd)
-export BUILDTAGS="seccomp exclude_graphdriver_devicemapper selinux btrfs_noversion exclude_graphdriver_btrfs $(hack/systemd_tag.sh) $(hack/libsubid_tag.sh)"
+export BUILDTAGS="seccomp exclude_graphdriver_devicemapper cni selinux btrfs_noversion exclude_graphdriver_btrfs $(hack/systemd_tag.sh) $(hack/libsubid_tag.sh)"
 export GO111MODULE=off
 export CGO_CFLAGS="%{optflags} -D_GNU_SOURCE -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64"
 export CNI_VERSION=`grep '^# github.com/containernetworking/cni ' src/modules.txt | sed 's,.* ,,'`
@@ -135,10 +135,49 @@ make DESTDIR=%{buildroot} PREFIX=%{_prefix} -C docs install
 %{_datadir}/%{name}/test
 
 %changelog
-* Thu Mar 21 2024 Jindrich Novy <jnovy@redhat.com> - 2:1.33.7-1
-- update to the latest content of https://github.com/containers/buildah/tree/release-1.33
-  (https://github.com/containers/buildah/commit/b95e962)
-- Resolves: RHEL-28230
+* Mon Oct 21 2024 Jindrich Novy <jnovy@redhat.com> - 2:1.37.5-1
+- update to https://github.com/containers/buildah/releases/tag/v1.37.5
+- Resolves: RHEL-61857
+
+* Mon Oct 14 2024 Jindrich Novy <jnovy@redhat.com> - 2:1.37.4-2
+- enable CNI
+- Resolves: RHEL-62107
+
+* Fri Oct 11 2024 Jindrich Novy <jnovy@redhat.com> - 2:1.37.4-1
+- update to https://github.com/containers/buildah/releases/tag/v1.37.4
+- Resolves: RHEL-61114
+
+* Mon Oct 07 2024 Jindrich Novy <jnovy@redhat.com> - 2:1.37.2-2
+- rebuild to fix  CVE-2024-34156
+- Resolves: RHEL-57912
+
+* Wed Aug 21 2024 Jindrich Novy <jnovy@redhat.com> - 2:1.37.2-1
+- update to https://github.com/containers/buildah/releases/tag/v1.37.2
+- Related: RHEL-27608
+
+* Thu Aug 15 2024 Jindrich Novy <jnovy@redhat.com> - 2:1.37.1-1
+- update to https://github.com/containers/buildah/releases/tag/v1.37.1
+- Related: RHEL-27608
+
+* Mon Jul 29 2024 Jindrich Novy <jnovy@redhat.com> - 2:1.37.0-1
+- update to https://github.com/containers/buildah/releases/tag/v1.37.0
+- Resolves: RHEL-47164 RHEL-40808
+
+* Wed May 29 2024 Jindrich Novy <jnovy@redhat.com> - 2:1.36.0-1
+- update to https://github.com/containers/buildah/releases/tag/v1.36.0
+- Related: RHEL-27608
+
+* Wed Mar 27 2024 Jindrich Novy <jnovy@redhat.com> - 2:1.35.2-1
+- update to https://github.com/containers/buildah/releases/tag/v1.35.2
+- Related: RHEL-27608
+
+* Tue Mar 19 2024 Jindrich Novy <jnovy@redhat.com> - 2:1.35.1-1
+- update to https://github.com/containers/buildah/releases/tag/v1.35.1
+- Related: RHEL-27608
+
+* Fri Mar 15 2024 Jindrich Novy <jnovy@redhat.com> - 2:1.35.0-1
+- update to https://github.com/containers/buildah/releases/tag/v1.35.0
+- Resolves: RHEL-29278
 
 * Mon Feb 26 2024 Jindrich Novy <jnovy@redhat.com> - 2:1.33.6-2
 - update tags for systemd libsubid
