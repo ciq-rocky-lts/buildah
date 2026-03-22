@@ -12,13 +12,13 @@ go build -buildmode pie -compiler gc -tags="rpm_crashtraceback libtrust_openssl 
 
 %global import_path github.com/containers/buildah
 %global branch release-1.33
-%global commit0 58af1cdf16e3cdcdf2e885b570c1fa5d04857c3a
+%global commit0 a7f817901d3bfe517394ada98ac240c7e5bcdaf1
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 Epoch: 2
 Name: buildah
-Version: 1.33.12
-Release: 1%{?dist}
+Version: 1.33.14
+Release: 2%{?dist}
 Summary: A command line tool used for creating OCI Images
 License: ASL 2.0
 URL: https://%{name}.io
@@ -136,6 +136,32 @@ make DESTDIR=%{buildroot} PREFIX=%{_prefix} -C docs install
 %{_datadir}/%{name}/test
 
 %changelog
+* Mon Feb 02 2026 Jindrich Novy <jnovy@redhat.com> - 2:1.33.14-2
+- rebuild for CVE-2025-61729
+- Resolves: RHEL-140529
+
+* Fri Jan 09 2026 Jindrich Novy <jnovy@redhat.com> - 2:1.33.14-1
+- update to the latest content of https://github.com/containers/buildah/tree/release-1.33
+  (https://github.com/containers/buildah/commit/a7f8179)
+- fixes "CVE-2025-47913 container-tools:rhel8/buildah: golang.org/x/crypto/ssh/agent: SSH client panic due to unexpected SSH_AGENT_SUCCESS [rhel-8.10.z]"
+- Resolves: RHEL-130974
+
+* Mon Dec 15 2025 Jindrich Novy <jnovy@redhat.com> - 2:1.33.13-1
+- update to the latest content of https://github.com/containers/buildah/tree/release-1.33
+  (https://github.com/containers/buildah/commit/65707d0)
+- fixes "[Minor Incident] CVE-2025-52881 container-tools:rhel8/buildah: container escape and denial of service due to arbitrary write gadgets and procfs write redirects [rhel-8.10.z]"
+- Resolves: RHEL-126916
+
+* Wed Dec 03 2025 Jindrich Novy <jnovy@redhat.com> - 2:1.33.12-3
+- rebuild for CVE-2025-58183
+- Resolves: RHEL-125644
+
+* Tue May 06 2025 Jindrich Novy <jnovy@redhat.com> - 2:1.33.12-2
+- update to the latest content of https://github.com/containers/buildah/tree/release-1.33
+  (https://github.com/containers/buildah/commit/cf49e7c)
+- fixes "CVE-2025-22871 container-tools:rhel8/buildah: Request smuggling due to acceptance of invalid chunked data in net/http [rhel-8.10.z]"
+- Resolves: RHEL-89239
+
 * Fri Jan 24 2025 Jindrich Novy <jnovy@redhat.com> - 2:1.33.12-1
 - update to the latest content of https://github.com/containers/buildah/tree/release-1.33
   (https://github.com/containers/buildah/commit/58af1cd)
