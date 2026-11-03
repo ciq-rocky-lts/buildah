@@ -12,23 +12,19 @@ go build -buildmode pie -compiler gc -tags="rpm_crashtraceback libtrust_openssl 
 
 %global import_path github.com/containers/buildah
 %global branch release-1.33
-%global commit0 a7f817901d3bfe517394ada98ac240c7e5bcdaf1
+%global commit0 2cbee78beb097a58bb86868e050e642619a146ca
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 Epoch: 2
 Name: buildah
-Version: 1.33.14
+Version: 1.33.15
 Release: 2%{?dist}
 Summary: A command line tool used for creating OCI Images
 License: ASL 2.0
 URL: https://%{name}.io
 # https://fedoraproject.org/wiki/PackagingDrafts/Go#Go_Language_Architectures
 ExclusiveArch: %{go_arches}
-%if 0%{?branch:1}
-Source0: https://%{import_path}/tarball/%{commit0}/%{branch}-%{shortcommit0}.tar.gz
-%else
-Source0: https://%{import_path}/archive/%{commit0}/%{name}-%{version}-%{shortcommit0}.tar.gz
-%endif
+Source0: https://gitlab.cee.redhat.com/sustaining-engineering/container-tools/src-git/%{name}/-/archive/%{commit0}/%{branch}-%{shortcommit0}.tar.gz
 BuildRequires: golang >= 1.17.7
 BuildRequires: git
 BuildRequires: glib2-devel
@@ -76,11 +72,7 @@ Requires: nmap-ncat
 This package contains system tests for %{name}
 
 %prep
-%if 0%{?branch:1}
-%autosetup -Sgit -n containers-%{name}-%{shortcommit0}
-%else
 %autosetup -Sgit -n %{name}-%{commit0}
-%endif
 sed -i 's/GOMD2MAN =/GOMD2MAN ?=/' docs/Makefile
 sed -i '/docs install/d' Makefile
 
@@ -136,6 +128,31 @@ make DESTDIR=%{buildroot} PREFIX=%{_prefix} -C docs install
 %{_datadir}/%{name}/test
 
 %changelog
+* Thu Oct 22 2026 Jindrich Novy <jnovy@redhat.com> - 2:1.33.15-2
+- Rebuild for CVE-2026-78667 and CVE-2026-111943
+- Resolves: RHEL-278949 RHEL-287628 RHEL-272014
+
+* Tue Sep 29 2026 Jindrich Novy <jnovy@redhat.com> - 2:1.33.15-1
+- fix Version to match the upstream release-1.33 branch content - Resolves:
+  RHEL-272014
+
+* Tue Sep 01 2026 Jindrich Novy <jnovy@redhat.com> - 2:1.33.14-6
+- rebuild with updated Go to fix CVE-2026-42499
+- Resolves: RHEL-241668 RHEL-242027 RHEL-242107 RHEL-242222 RHEL-242343 RHEL-242382 RHEL-251834
+
+* Thu Aug 20 2026 Jindrich Novy <jnovy@redhat.com> - 2:1.33.14-5
+- rebuild with Go 1.25.11 to fix CVE-2026-33818, CVE-2026-56853, CVE-2026-56858,
+  CVE-2026-56859, CVE-2026-56860, CVE-2026-56862
+
+* Wed Jul 01 2026 Jindrich Novy <jnovy@redhat.com> - 2:1.33.14-4
+- switch source URL from GitHub to the internal GitLab sustaining-engineering repo
+- update to the latest content of release-1.33 (commit 2cbee78)
+- bump golang.org/x/crypto to v0.53.0 to fix CVE-2026-39829, CVE-2026-39830, CVE-2026-39832
+
+* Tue Feb 17 2026 Jindrich Novy <jnovy@redhat.com> - 2:1.33.14-3
+- rebuild for CVE-2025-68121
+- Resolves: RHEL-149262
+
 * Mon Feb 02 2026 Jindrich Novy <jnovy@redhat.com> - 2:1.33.14-2
 - rebuild for CVE-2025-61729
 - Resolves: RHEL-140529
