@@ -15,7 +15,7 @@ go build -buildmode pie -compiler gc -tags="rpm_crashtraceback libtrust_openssl 
 Epoch: 2
 Name: buildah
 Version: 1.37.6
-Release: 1%{?dist}
+Release: 1.2%{?dist}
 Summary: A command line tool used for creating OCI Images
 License: ASL 2.0
 URL: https://%{name}.io
@@ -135,6 +135,12 @@ make DESTDIR=%{buildroot} PREFIX=%{_prefix} -C docs install
 %{_datadir}/%{name}/test
 
 %changelog
+* Wed Nov 18 2026 Jason Rodriguez <jrodriguez@ciq.com> - 2:1.37.6-1.2
+- Rebuild against golang 1.25.14 (toolchain CVE; no source change)
+
+* Fri Jun 26 2026 Jason Rodriguez <jrodriguez@ciq.com> - 2:1.37.6-1.1
+- Rebuild against golang 1.25.9 to remediate CVE-2025-61726 and CVE-2026-25679 (Go net/url stdlib, statically linked into the binaries)
+
 * Thu Jan 23 2025 Jindrich Novy <jnovy@redhat.com> - 2:1.37.6-1
 - update to the latest content of https://github.com/containers/buildah/tree/release-1.37
   (https://github.com/containers/buildah/commit/fd39521)
